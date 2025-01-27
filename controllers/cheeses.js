@@ -90,7 +90,9 @@ router.post('/', (req, res) => {
  *     parameters:
  *       -name: id
  *       in: path
- *       HHHHHHHHHHHHHHEEEEEEEEEEEEEEERRRRRRRRRRRRRREEEEEEEEEEEEEEEEE
+ *       required: true
+ *       schema:
+ *         type: integer
  *     requestBody:
  *       required: true
  *       content:
