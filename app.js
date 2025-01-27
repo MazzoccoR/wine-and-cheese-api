@@ -6,6 +6,7 @@ Description:
  */
 import express from 'express';
 import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
 
 //swagger for api docs
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -34,6 +35,11 @@ const docOptions={
 const openapiSpecification = swaggerJSDoc(docOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 //EXACLY ABOVE FOR ASSIGNEMNT 1 (just chnage title)
+
+//db connect
+mongoose.connect(process.env.DB,{} )
+.then((res)=>console.log('Connected to DB'))
+.catch((err)=>console.log(`connection Failure: ${err}`));
 
 //url dispatching
 app.use("/api/v1/cheeses", cheesesController);
