@@ -5,6 +5,8 @@ Last Edited on: January 20, 2025
 Description: 
 */
 import express from 'express';
+//model ref
+import Cheeses from "../models/cheese.js";
 
 //create express router object
 const router = express.Router();
@@ -25,8 +27,14 @@ let cheeses = [
  *       200:
  *         description: A list of cheeses
  */
-router.get('/', (req, res) => {
+ router.get('/', async(req, res) => {
+    //use cheeese model to fetch all documents from cheeses collection in db
+    let cheeses = await Cheeses.find(); //wawsit makes it need to be async
+    if(!cheeses){
+        return res.status(204).json({msg: 'No Results'});
+    }
     return res.status(200).json(cheeses);
+
 });
 
 /**
@@ -43,50 +51,49 @@ router.get('/', (req, res) => {
  *     responses:
  *       200:
  *         description: Returns a single cheese
- *       404: 
- *         description: Cheese not found
+ *       404:
+ *         description: Not found
  */
-router.get('/:id', (req, res) => {
-    let index = cheeses.findIndex(c=> c.id==req.params.id);
+// router.get('/:id', (req, res) => {
+//     let index = cheeses.findIndex(c=> c.id==req.params.id);
 
-    if(index==-1){
-        return res.status(404).json({msg: 'Not Found'});
-    }
-});
+//     if(index==-1){
+//         return res.status(404).json({msg: 'Not Found'});
+//     }
+// });
 
 /**
  * @swagger
  * /api/v1/cheeses:
  *   post:
- *     summary: Add new cheese from POST body
+ *     summary: add new cheese from POST body
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
  *             type: object
- *           properties:
- *             id:
- *               type: integer
- *             name:
- *               type: string
- *     respenses:
+ *             properties:
+ *               id:
+ *                 type: integer
+ *               name:
+ *                 type: string
+ *     responses:
  *       201:
  *         description: Resource created
  *       400:
- *         desctiption: Bad request
- *         
+ *         description: Bad request
  */
-router.post('/', (req, res) => { 
-    cheeses.push(req.body);
-    return res.status(201).json(); //201: resource created
-});
+// router.post('/', (req, res) => { 
+//     cheeses.push(req.body);
+//     return res.status(201).json(); //201: resource created
+// });
 
 /**
  * @swagger
  * /api/v1/cheeses/{id}:
- *   post:
- *     summary: Update cheese from request body
+ *   put:
+ *     summary: update selected cheese from request body
  *     parameters:
  *       -name: id
  *       in: path
@@ -99,34 +106,34 @@ router.post('/', (req, res) => {
  *         application/json:
  *           schema:
  *             type: object
- *           properties:
- *             id:
- *               type: integer
- *             name:
- *               type: string
- *     respenses:
+ *             properties:
+ *               id:
+ *                 type: integer
+ *               name:
+ *                 type: string
+ *     responses:
  *       204:
  *         description: Resource updated
  *       400:
- *         desctiption: Bad request 
+ *         description: Bad request
  *       404:
- *         desctiption: SOMETHING  
+ *         description: Not found
  */
-router.get('/:id', (req, res) => {
-    let index = cheeses.findIndex(c=> c.id==req.params.id);
+// router.get('/:id', (req, res) => {
+//     let index = cheeses.findIndex(c=> c.id==req.params.id);
 
-    if(index==-1){
-        return res.status(404).json({msg: 'Not Found'});
-    }
-    cheeses[index].name = req.body.name;
-    return res.status(204).json(); //204: resource modified
-});
+//     if(index==-1){
+//         return res.status(404).json({msg: 'Not Found'});
+//     }
+//     cheeses[index].name = req.body.name;
+//     return res.status(204).json(); //204: resource modified
+// });
 
 /**
  * @swagger
  * /api/v1/cheeses/{id}:
- *   get:
- *     summary: Remove cheese by its id
+ *   delete:
+ *     summary: Remove selected cheese
  *     parameters:
  *       - name: id
  *         in: path
@@ -135,19 +142,19 @@ router.get('/:id', (req, res) => {
  *           required: true
  *     responses:
  *       204:
- *         description: Resource updated(removed)
- *       404: 
+ *         description: Resource updated (removed)
+ *       404:
  *         description: Not found
  */
-router.get('/:id', (req, res) => {
-    let index = cheeses.findIndex(c=> c.id==req.params.id);
+// router.get('/:id', (req, res) => {
+//     let index = cheeses.findIndex(c=> c.id==req.params.id);
 
-    if(index==-1){
-        return res.status(404).json({msg: 'Not Found'});
-    }
-    cheeses.splice(index, 1);
-    return res.status(204).json(); //204: resource modified
-});
+//     if(index==-1){
+//         return res.status(404).json({msg: 'Not Found'});
+//     }
+//     cheeses.splice(index, 1);
+//     return res.status(204).json(); //204: resource modified
+// });
 
 
 //make controller public to rest of the app
