@@ -11,6 +11,7 @@ import mongoose from 'mongoose';
 //swagger for api docs
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import cors from 'cors';
 
 //controllers
 import cheesesController from './controllers/cheeses.js';
@@ -36,10 +37,16 @@ const openapiSpecification = swaggerJSDoc(docOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 //EXACLY ABOVE FOR ASSIGNEMNT 1 (just chnage title)
 
-//db connect
+//db connect - make sure that "dev": "nodemon --env-file=.env app.js", not jsut app.js (oops)
 mongoose.connect(process.env.DB,{} )
 .then((res)=>console.log('Connected to DB'))
 .catch((err)=>console.log(`connection Failure: ${err}`));
+
+//cors: allow angular client http requests
+app.use(cors({
+    origin: process.env.CLIENT_URL,
+    methods: 'GET,POST,PUT,DELETE,HEAD,OPTIONS'
+}));
 
 //url dispatching
 app.use("/api/v1/cheeses", cheesesController);
