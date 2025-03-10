@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 //     __dirname,
 //     "node_modules",
 //     "swagger-ui-dist",
-)
+//)
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
