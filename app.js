@@ -5,13 +5,13 @@ Last Edited on: January 20, 2025
 Description: 
  */
 import path from "path";
-import  { fileURLToPath } from "url";
-const __filename = fileURLToPath(import.meta.url);
+// import  { fileURLToPath } from "url";
+// const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-export const __SWAGGERFISPATH=path.join(
-    __dirname,
-    "node_modules",
-    "swagger-ui-dist",
+// export const __SWAGGERFISPATH=path.join(
+//     __dirname,
+//     "node_modules",
+//     "swagger-ui-dist",
 )
 import express from 'express';
 import bodyParser from 'body-parser';
