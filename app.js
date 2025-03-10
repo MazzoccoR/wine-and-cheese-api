@@ -30,6 +30,9 @@ const app = express();
 
 app.use(bodyParser.json());
 
+//get publuc path for angular client
+app.use(express.static(`$(__dirname)/public`));
+
 //EXACLY BELOW FOR ASSIGNMENT 1 (just change title)
 //swagger config
 const docOptions={
@@ -59,7 +62,9 @@ app.use(cors({
 
 //url dispatching
 app.use("/api/v1/cheeses", cheesesController);
-
+app.use('*', (req, res) => {
+    res.sendFile(`${__dirname}/public/index.html`);
+});
 //start web server
 app.listen(3000, () => { 
     console.log('Express API running on port 3000: http://localhost:3000'); 
