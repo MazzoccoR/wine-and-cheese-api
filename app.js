@@ -4,15 +4,7 @@ Created on: January 20, 2025
 Last Edited on: January 20, 2025
 Description: 
  */
-import path from "path";
-// import  { fileURLToPath } from "url";
-// const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-// export const __SWAGGERFISPATH=path.join(
-//     __dirname,
-//     "node_modules",
-//     "swagger-ui-dist",
-//)
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
@@ -21,6 +13,7 @@ import mongoose from 'mongoose';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import cors from 'cors';
+import path from 'path';
 
 //controllers
 import cheesesController from './controllers/cheeses.js';
@@ -29,9 +22,9 @@ import cheesesController from './controllers/cheeses.js';
 const app = express();
 
 app.use(bodyParser.json());
-
-//get publuc path for angular client
-app.use(express.static(`$(__dirname)/public`));
+// get public path for angular client app
+const __dirname = path.resolve();
+app.use(express.static(`${__dirname}/public`));
 
 //EXACLY BELOW FOR ASSIGNMENT 1 (just change title)
 //swagger config
