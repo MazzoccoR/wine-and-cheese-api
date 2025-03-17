@@ -21,7 +21,9 @@ import User from './models/user.js';
 
 //jwt auth
 import cookieParser from 'cookie-parser';
-import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';//controllers
+import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
+
+//controllers
 import cheesesController from './controllers/cheeses.js';
 import userController from './controllers/users.js';
 
@@ -72,7 +74,7 @@ passport.use(User.createStrategy());
 const jwtOptions = {
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
     secretOrKey: process.env.PASSPORT_SECRET
-}
+};
 
 // jwt strategy
 let strategy = new JwtStrategy(jwtOptions, (jwt_payload, callback) => {
