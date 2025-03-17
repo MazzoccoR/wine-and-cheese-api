@@ -1,21 +1,15 @@
-/*
-Rebecca Mazzocco
-Created on: January 20, 2025
-Last Edited on: January 20, 2025
-Description: 
-*/
 import express from 'express';
-//model ref
-import Cheeses from "../models/cheese.js";
+// model ref
+import Cheese from '../models/cheese.js';
 
-//create express router object
+// create express router object
 const router = express.Router();
 
-// // mock some sata
+// mock some data
 // let cheeses = [
-//     {id: 1, name: 'Marble'},
-//     {id: 2, name: 'Camembert'},
-//     {id: 3, name: 'Leicester'}
+//     { id: 1, name: 'Marble' },
+//     { id: 2, name: 'Camembert' },
+//     { id: 3, name: 'Leicester' }
 // ];
 
 /**
@@ -27,14 +21,15 @@ const router = express.Router();
  *       200:
  *         description: A list of cheeses
  */
- router.get('/', async(req, res) => {
-    //use cheeese model to fetch all documents from cheeses collection in db
-    let cheeses = await Cheeses.find(); //wawsit makes it need to be async
-    if(!cheeses){
-        return res.status(204).json({msg: 'No Results'});
-    }
-    return res.status(200).json(cheeses);
+router.get('/', async (req, res) => {
+    // use Cheese model to fetch all documents from cheeses collection in db
+    let cheeses = await Cheese.find();
 
+    if (!cheeses) {
+        return res.status(204).json({ err: 'No Results' });
+    }
+
+    return res.status(200).json(cheeses);
 });
 
 /**
@@ -54,12 +49,14 @@ const router = express.Router();
  *       404:
  *         description: Not found
  */
-router.get('/:id', async(req, res) => {
-    let cheese = await Cheeses.findById(req.params.id);
-    if(!cheese){
-        return res.status(404).json({msg: 'Not Found'});
+router.get('/:id', async (req, res) => {
+    let cheese = await Cheese.findById(req.params.id);
+
+    if (!cheese) {
+        return res.status(404).json({ msg: 'Not Found' });
     }
-    return res.status(200).json(cheese); //204: resource modified
+
+    return res.status(200).json(cheese);
 });
 
 /**
@@ -84,16 +81,13 @@ router.get('/:id', async(req, res) => {
  *       400:
  *         description: Bad request
  */
- router.post('/', async(req, res) => { //gotta add ascyn chere cause we use await
-    if(!req.body){
-        return res.status(400).json({msg: 'Request Body Required'});
+router.post('/', async (req, res) => {
+    try {
+        await Cheese.create(req.body);
+        return res.status(201).json();  // 201: resource created
     }
-    try{
-        await Cheeses.create(req.body);
-        return res.status(201).json(); //201: resource created
-    }
-    catch(err){
-        return res.status(400).json({err: `Bad Request: ${err}`});
+    catch (err) {
+        return res.status(400).json({ err: `Bad Request: ${err}` });
     }
 });
 
@@ -127,22 +121,26 @@ router.get('/:id', async(req, res) => {
  *       404:
  *         description: Not found
  */
- router.put('/:id', async(req, res) => {
-    try{
-        let cheese = await Cheeses.findById(req.params.id);
-        if(!cheese){
-        return res.status(404).json({msg: 'Not Found'});
+router.put('/:id', async (req, res) => {
+    try {
+        let cheese = await Cheese.findById(req.params.id);
+
+        if (!cheese) {
+            return res.status(404).json({ msg: 'Not Found' });
         }
-        if(req.params.id != req.body._id){
-            return res.status(400).json({msg: `Bad Request: _ids do not match`});
+
+        if (req.params.id != req.body._id) {
+            return res.status(400).json({ msg: 'Bad Request: _ids do not match' });
         }
-        await cheese.update(req.body);
-        return res.status(204).json(); //204: resource modified
+
+        await Cheese.findByIdAndUpdate(req.params.id, req.body);
+        return res.status(204).json(); // 204: resource modified
     }
-    catch(err){
-        return res.status(400).json({msg: `Bad Request: ${err}`});
+    catch (err) {
+        return res.status(400).json({ err: `Bad Request: ${err}` });
     }
- });
+});
+
 
 /**
  * @swagger
@@ -161,16 +159,16 @@ router.get('/:id', async(req, res) => {
  *       404:
  *         description: Not found
  */
-router.delete('/:id', async(req, res) => {
-    let cheese = await Cheeses.findById(req.params.id);
+router.delete('/:id', async (req, res) => {
+    let cheese = await Cheese.findById(req.params.id);
 
-    if(!cheese){
-        return res.status(404).json({msg: 'Not Found'});
+    if (!cheese) {
+        return res.status(404).json({ msg: 'Not Found' });
     }
-    await Cheeses.findByIdAndDelete(req.params.id);
-    return res.status(204).json(); //204: resource modified
+
+   await Cheese.findByIdAndDelete(req.params.id);
+    return res.status(204).json();
 });
 
-
-//make controller public to rest of the app
+// make controller public to rest of the app
 export default router;
